@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: php.Dockerfile
+    volumes:
+      - .:/var/www/html
+    container_name: for-edu-php
+
+  nginx:
+    image: nginx:stable
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx-frontend.conf:/etc/nginx/conf.d/frontend.conf
+      - ./nginx-backend.conf:/etc/nginx/conf.d/backend.conf
+    depends_on:
+      - php
+    container_name: for-edu-nginx
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    container_name: for-edu-mysql
+
+volumes:
+  mysql_data:
