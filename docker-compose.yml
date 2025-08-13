@@ -5,8 +5,9 @@ services:
     build:
       context: .
       dockerfile: php.Dockerfile
+    user: "1000:1000"        # Host foydalanuvchi bilan bir xil UID/GID
     volumes:
-      - .:/var/www/html
+      - .:/var/www/html:Z    # SELinux uchun :Z belgisini qo‘shdik
     container_name: for-edu-php
 
   nginx:
@@ -14,9 +15,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - .:/var/www/html
-      - ./nginx-frontend.conf:/etc/nginx/conf.d/frontend.conf
-      - ./nginx-backend.conf:/etc/nginx/conf.d/backend.conf
+      - .:/var/www/html:Z    # SELinux uchun :Z belgisini qo‘shdik
+      - ./nginx-frontend.conf:/etc/nginx/conf.d/frontend.conf:Z
+      - ./nginx-backend.conf:/etc/nginx/conf.d/backend.conf:Z
     depends_on:
       - php
     container_name: for-edu-nginx

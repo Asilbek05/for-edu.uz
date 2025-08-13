@@ -183,14 +183,12 @@ $this->beginPage() ?>
         </div>
     </aside>
 
-
     <main class="main-content position-relative border-radius-lg ">
 
         <?= $this->render('_navbar') ?>
 
         <div class="container-fluid py-4">
             <?= $content ?>
-
 
         <footer class="footer pt-3  ">
             <div class="container-fluid">
@@ -199,7 +197,7 @@ $this->beginPage() ?>
                         <div class="copyright text-center text-sm text-muted text-lg-start">
                             © <?= date('Y') ?>,
                             made with <i class="fa fa-heart"></i> by
-                            <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a>
+                            For-edu.uz
                             for a better web.
                         </div>
                     </div>
