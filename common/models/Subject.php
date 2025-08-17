@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\BaseActiveRecord;
 
 /**
  * This is the model class for table "subject".
@@ -17,9 +19,21 @@ use Yii;
  */
 class Subject extends \yii\db\ActiveRecord
 {
-
-
-    /**
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }    /**
      * {@inheritdoc}
      */
     public static function tableName()

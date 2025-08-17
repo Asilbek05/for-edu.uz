@@ -11,16 +11,15 @@ use yii\widgets\ActiveForm;
 <div class="subject-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="form-group mb-3">
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'class' => 'form-control']) ?>
+    </div>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <div class="form-group mb-3">
+        <?= $form->field($model, 'description')->textarea(['rows' => 6, 'class' => 'form-control']) ?>
+    </div>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <div class="form-group">
+    <div class="form-group mt-4">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 

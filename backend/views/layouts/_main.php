@@ -54,10 +54,11 @@ $this->beginPage() ?>
                             ['class' => 'icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center']
                         ) .
                         Html::tag('span', 'Dashboard', ['class' => 'nav-link-text ms-1']),
-                        Url::to(['/site/dashboard']),
+                        Url::to(['/site/index']),
                         ['class' => 'nav-link active']
                     ) ?>
                 </li>
+
 
                 <li class="nav-item">
                     <?= Html::a(
@@ -65,8 +66,8 @@ $this->beginPage() ?>
                             Html::tag('i', '', ['class' => 'ni ni-calendar-grid-58 text-dark text-sm opacity-10']),
                             ['class' => 'icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center']
                         ) .
-                        Html::tag('span', 'Tables', ['class' => 'nav-link-text ms-1']),
-                        Url::to(['/site/tables']),
+                        Html::tag('span', 'Subjects', ['class' => 'nav-link-text ms-1']),
+                        Url::to(['/subject/index']),
                         ['class' => 'nav-link']
                     ) ?>
                 </li>
@@ -157,7 +158,6 @@ $this->beginPage() ?>
                 ]) ?>
                 <div class="card-body text-center p-3 w-100 pt-0">
                     <div class="docs-info">
-                        <h6 class="mb-0">Need help?</h6>
                         <p class="text-xs font-weight-bold mb-0">Please check our docs</p>
                     </div>
                 </div>
@@ -190,6 +190,9 @@ $this->beginPage() ?>
         <div class="container-fluid py-4">
             <?= $content ?>
 
+
+
+        </div>
         <footer class="footer pt-3  ">
             <div class="container-fluid">
                 <div class="row align-items-center justify-content-lg-between">
@@ -220,9 +223,8 @@ $this->beginPage() ?>
                 </div>
             </div>
         </footer>
-
-        </div>
     </main>
+
 
     <?= $this->render('_fixed_plugin') ?>
 

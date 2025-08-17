@@ -16,7 +16,7 @@ class m250809_114657_create_payment_table extends Migration
             'id' => $this->primaryKey(),
             'student_id' => $this->integer()->notNull(),
             'amount' => $this->decimal(10,2)->notNull(),
-            'payment_type' => $this->string(20)->notNull(), // monthly, one_time
+            'payment_type' => $this->string(20)->notNull(),
             'date' => $this->date()->notNull(),
             'created_at' => $this->integer()->notNull(),
         ]);

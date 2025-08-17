@@ -31,6 +31,7 @@ class PaymentController extends Controller
         );
     }
 
+
     /**
      * Lists all Payment models.
      *
