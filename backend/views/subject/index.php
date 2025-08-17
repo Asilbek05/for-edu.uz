@@ -10,403 +10,475 @@ use yii\grid\GridView;
 /** @var common\models\SubjectSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Fanlar ro\'yxati';
+$this->title = 'Subject List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
-    .subject-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        border: none;
-        overflow: hidden;
-        position: relative;
+    /* Global styles */
+    body {
+        background-color: #f0f2f5;
+        font-family: 'Inter', sans-serif;
+        padding: 0;
     }
 
-    .subject-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7);
-        background-size: 300% 300%;
-        animation: gradientShift 3s ease infinite;
+    /* Main page container */
+    .subject-page-container {
+        padding: 1.5rem 1rem;
+        margin: 0;
     }
 
-    @keyframes gradientShift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+    /* Clean and modern header section */
+    .page-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 1.5rem;
     }
 
-    .card-header {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    .page-header-left {
+        display: flex;
+        flex-direction: column;
     }
 
-    .subject-icon {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 15px;
+    .page-header-left h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 0.25rem 0;
         display: flex;
         align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 20px;
-        margin-right: 15px;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        gap: 0.75rem;
     }
 
-    .subject-name {
-        font-weight: 700;
-        color: #2d3436;
-        font-size: 16px;
-        margin-bottom: 5px;
-        text-decoration: none;
+    .page-header-left h1 i {
+        color: #4f46e5;
     }
 
-    .subject-description {
-        color: #636e72;
-        font-size: 13px;
-        line-height: 1.4;
+    .page-header-left p {
+        font-size: 0.95rem;
+        color: #64748b;
+        margin: 0;
     }
 
-    .table-modern {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    .page-header-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
 
-    .table-modern thead th {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border: none;
-        color: #495057;
+    .header-stats {
+        background-color: white;
+        color: #4f46e5;
         font-weight: 600;
-        padding: 20px 15px;
-        position: relative;
-    }
-
-    .table-modern tbody tr {
-        transition: all 0.3s ease;
-        border: none;
-    }
-
-    .table-modern tbody tr:hover {
-        background-color: #f8f9ff;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .table-modern tbody td {
-        border: none;
-        padding: 20px 15px;
-        vertical-align: middle;
-    }
-
-    .action-btn {
-        display: inline-block;
-        padding: 8px 15px;
-        margin: 0 3px;
-        border-radius: 10px;
-        text-decoration: none;
-        font-size: 12px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .btn-view {
-        background: linear-gradient(135deg, #74b9ff, #0984e3);
-        color: white;
-        box-shadow: 0 4px 15px rgba(116, 185, 255, 0.4);
-    }
-
-    .btn-view:hover {
-        background: linear-gradient(135deg, #0984e3, #74b9ff);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(116, 185, 255, 0.6);
-        color: white;
-        text-decoration: none;
-    }
-
-    .btn-edit {
-        background: linear-gradient(135deg, #55a3ff, #003d82);
-        color: white;
-        box-shadow: 0 4px 15px rgba(85, 163, 255, 0.4);
-    }
-
-    .btn-edit:hover {
-        background: linear-gradient(135deg, #003d82, #55a3ff);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(85, 163, 255, 0.6);
-        color: white;
-        text-decoration: none;
-    }
-
-    .btn-delete {
-        background: linear-gradient(135deg, #ff7675, #d63031);
-        color: white;
-        box-shadow: 0 4px 15px rgba(255, 118, 117, 0.4);
-    }
-
-    .btn-delete:hover {
-        background: linear-gradient(135deg, #d63031, #ff7675);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 118, 117, 0.6);
-        color: white;
-        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e2e8f0;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .create-btn {
-        background: linear-gradient(135deg, #00b894, #00a085);
-        border: none;
-        border-radius: 12px;
-        padding: 12px 25px;
-        color: white;
+        background-color: #4f46e5;
+        color: #fff;
         font-weight: 600;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
         text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(0, 184, 148, 0.3);
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
     }
 
     .create-btn:hover {
-        background: linear-gradient(135deg, #00a085, #00b894);
-        transform: translateY(-3px);
-        box-shadow: 0 15px 35px rgba(0, 184, 148, 0.4);
+        background-color: #4338ca;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+    /* Main white card container */
+    .content-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        padding: 2rem;
+    }
+
+    /* GridView table styling */
+    .modern-table {
+        margin: 0;
+        width: 100%;
+    }
+
+    .modern-table thead th {
+        background: #f8fafc;
+        border: none;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modern-table tbody tr {
+        border-bottom: 1px solid #e2e8f0;
+        transition: background-color 0.2s ease;
+    }
+
+    .modern-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .modern-table tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    .modern-table tbody td {
+        padding: 1.5rem;
+        vertical-align: middle;
+        font-size: 0.95rem;
+        color: #475569;
+    }
+
+    .modern-table .filters input {
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        width: 100%;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .modern-table .filters input:focus {
+        outline: none;
+        border-color: #4f46e5;
+    }
+
+    /* Subject item styling */
+    .subject-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .subject-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+        background: #e0e7ff;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        color: #4f46e5;
+    }
+
+    .subject-info h6 {
+        color: #1e293b;
+        font-weight: 600;
+        font-size: 1rem;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .subject-info p {
+        color: #64748b;
+        font-size: 0.875rem;
+        margin: 0;
+    }
+
+    /* Action buttons styling */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
         color: white;
         text-decoration: none;
+        transition: all 0.3s ease;
     }
 
-    .stats-badge {
-        background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
-        color: #2d3436;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        display: inline-block;
+    .action-btn:hover {
+        transform: scale(1.1);
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
+    /* Specific button styles */
+    .view-btn, .update-btn, .delete-btn {
+        color: white;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .view-btn {
+        color: #6366f1;
+        background: #f1f5f9;
+    }
+    .view-btn:hover {
+        color: white;
+        background-color: #6366f1;
+    }
+
+    .update-btn {
+        color: #10b981;
+        background: #f0fdf4;
+    }
+    .update-btn:hover {
+        color: white;
+        background-color: #10b981;
+    }
+
+    .delete-btn {
+        color: #ef4444;
+        background: #fef2f2;
+    }
+    .delete-btn:hover {
+        color: white;
+        background-color: #ef4444;
+    }
+
+    /* Empty state */
     .empty-state {
         text-align: center;
-        padding: 60px 20px;
-        color: #636e72;
+        padding: 5rem 2rem;
+        color: #64748b;
     }
 
-    .empty-state-icon {
-        font-size: 64px;
-        color: #ddd;
-        margin-bottom: 20px;
+    .empty-state .icon {
+        font-size: 4rem;
+        color: #cbd5e1;
+        margin-bottom: 1.5rem;
     }
 
-    .page-title {
-        color: #2d3436;
+    .empty-state h3 {
+        font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 8px;
-        font-size: 28px;
+        color: #1e293b;
+        margin-bottom: 0.75rem;
     }
 
-    .page-subtitle {
-        color: #636e72;
-        font-size: 16px;
-        margin-bottom: 30px;
+    .empty-state p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .filter-section {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    /* --- Responsive design for mobile devices --- */
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .page-header-right {
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .header-stats {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .create-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Hide table headers on mobile */
+        .modern-table thead {
+            display: none;
+        }
+
+        /* Transform table rows into cards on mobile */
+        .modern-table tbody,
+        .modern-table tr,
+        .modern-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .modern-table tr {
+            margin-bottom: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background-color: white;
+            padding: 1rem;
+        }
+
+        .modern-table tbody td {
+            padding: 0.5rem 0;
+            text-align: left !important;
+        }
+
+        /* Show column name before data on mobile */
+        .modern-table td::before {
+            content: attr(data-label);
+            display: block;
+            font-weight: 600;
+            color: #4f46e5;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Separate layout for buttons */
+        .modern-table td:last-child {
+            margin-top: 1rem;
+        }
+
+        .action-buttons {
+            justify-content: flex-start;
+        }
     }
 </style>
 
-<div class="subject-index">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="page-title">📚 Fanlar ro'yxati</h1>
-                    <p class="page-subtitle">O'quv markazi fanlarini boshqaring va yangi fanlar qo'shing</p>
+<div class="subject-page-container">
+    <div class="content-card">
+        <!-- Compact Header Section -->
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="header-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    Subject List
+                </h1>
+                <p class="header-subtitle">
+                    Manage subjects and add new ones
+                </p>
+            </div>
+            <div class="page-header-right">
+                <div class="header-stats">
+                    <i class="fas fa-chart-bar"></i>
+                    Total: <?= $dataProvider->totalCount ?> subjects
                 </div>
-                <div>
-                    <?= Html::a('
-                        <i class="fas fa-plus"></i>
-                        Yangi fan qo\'shish
-                    ', ['create'], ['class' => 'create-btn']) ?>
-                </div>
+                <?= Html::a('<i class="fas fa-plus"></i> New Subject', ['create'], ['class' => 'create-btn']) ?>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="subject-card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1" style="color: #2d3436; font-weight: 600;">
-                            <i class="fas fa-graduation-cap me-2" style="color: #667eea;"></i>
-                            Barcha fanlar
-                        </h5>
-                        <p class="mb-0" style="color: #636e72; font-size: 14px;">
-                            Jami <?= $dataProvider->totalCount ?> ta fan mavjud
-                        </p>
-                    </div>
-                    <span class="stats-badge">
-                        <i class="fas fa-chart-bar"></i> <?= $dataProvider->totalCount ?> ta fan
-                    </span>
-                </div>
+        <?php if ($dataProvider->totalCount > 0): ?>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'summary' => false,
+                'tableOptions' => [
+                    'class' => 'table modern-table'
+                ],
+                'columns' => [
+                    [
+                        'attribute' => 'name',
+                        'label' => 'Subject Name',
+                        'format' => 'raw',
+                        'contentOptions' => ['data-label' => 'Subject Name'],
+                        'value' => function ($model) {
+                            $icons = [
+                                'Mathematics' => '📐', 'Physics' => '⚡',
+                                'Chemistry' => '🧪', 'Biology' => '🌱',
+                                'English' => '🇬🇧', 'Russian' => '🇷🇺',
+                                'History' => '📜', 'Geography' => '🗺️',
+                                'Literature' => '📚', 'Computer Science' => '💻',
+                            ];
+                            $icon = '📖';
+                            foreach ($icons as $subject => $subjectIcon) {
+                                if (stripos($model->name, $subject) !== false) {
+                                    $icon = $subjectIcon;
+                                    break;
+                                }
+                            }
 
-                <div class="card-body p-0">
-                    <?php if ($dataProvider->totalCount > 0): ?>
-                        <div class="table-modern">
-                            <?= GridView::widget([
-                                'dataProvider' => $dataProvider,
-                                'filterModel' => $searchModel,
-                                'summary' => false,
-                                'tableOptions' => [
-                                    'class' => 'table table-modern mb-0'
-                                ],
-                                'columns' => [
-                                    [
-                                        'attribute' => 'name',
-                                        'label' => 'Fan nomi va tavsifi',
-                                        'format' => 'raw',
-                                        'headerOptions' => ['style' => 'width: 40%;'],
-                                        'value' => function ($model) {
-                                            $icons = [
-                                                'Matematika' => '🔢',
-                                                'Fizika' => '⚛️',
-                                                'Kimyo' => '🧪',
-                                                'Biologiya' => '🧬',
-                                                'Ingliz tili' => '🇬🇧',
-                                                'Rus tili' => '🇷🇺',
-                                                'Tarix' => '📜',
-                                                'Geografiya' => '🌍',
-                                                'Adabiyot' => '📖',
-                                            ];
-
-                                            $icon = $icons[$model->name] ?? '📚';
-
-                                            return '
-                                                <div class="d-flex align-items-center">
-                                                    <div class="subject-icon">
-                                                        ' . $icon . '
-                                                    </div>
-                                                    <div>
-                                                        <div class="subject-name">' . Html::encode($model->name) . '</div>
-                                                        <div class="subject-description">' . Html::encode($model->description ?: 'Tavsif mavjud emas') . '</div>
-                                                    </div>
-                                                </div>
-                                            ';
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'created_at',
-                                        'label' => 'Yaratilgan sana',
-                                        'format' => 'raw',
-                                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                                        'contentOptions' => ['class' => 'text-center'],
-                                        'value' => function ($model) {
-                                            $date = Yii::$app->formatter->asDate($model->created_at);
-                                            return '<div style="color: #636e72; font-weight: 500;">' . $date . '</div>';
-                                        }
-                                    ],
-                                    [
-                                        'attribute' => 'updated_at',
-                                        'label' => 'Yangilangan sana',
-                                        'format' => 'raw',
-                                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                                        'contentOptions' => ['class' => 'text-center'],
-                                        'value' => function ($model) {
-                                            $date = Yii::$app->formatter->asDate($model->updated_at);
-                                            return '<div style="color: #636e72; font-weight: 500;">' . $date . '</div>';
-                                        }
-                                    ],
-                                    [
-                                        'class' => ActionColumn::className(),
-                                        'template' => '{view} {update} {delete}',
-                                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                                        'contentOptions' => ['class' => 'text-center'],
-                                        'buttons' => [
-                                            'view' => function ($url, $model, $key) {
-                                                return Html::a(
-                                                    '<i class="fas fa-eye"></i> Ko\'rish',
-                                                    Url::to(['view', 'id' => $model->id]),
-                                                    ['class' => 'action-btn btn-view']
-                                                );
-                                            },
-                                            'update' => function ($url, $model, $key) {
-                                                return Html::a(
-                                                    '<i class="fas fa-edit"></i> Tahrirlash',
-                                                    Url::to(['update', 'id' => $model->id]),
-                                                    ['class' => 'action-btn btn-edit']
-                                                );
-                                            },
-                                            'delete' => function ($url, $model, $key) {
-                                                return Html::a(
-                                                    '<i class="fas fa-trash"></i> O\'chirish',
-                                                    Url::to(['delete', 'id' => $model->id]),
-                                                    [
-                                                        'class' => 'action-btn btn-delete',
-                                                        'data-confirm' => 'Haqiqatan ham bu fanni o\'chirmoqchimisiz?',
-                                                        'data-method' => 'post',
-                                                    ]
-                                                );
-                                            },
-                                        ]
-                                    ],
-                                ],
-                            ]); ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📚</div>
-                            <h4>Hozircha fanlar mavjud emas</h4>
-                            <p>O'quv markazingiz uchun birinchi fanni qo'shishdan boshlang</p>
-                            <?= Html::a('
-                                <i class="fas fa-plus"></i>
-                                Birinchi fanni qo\'shish
-                            ', ['create'], ['class' => 'create-btn mt-3']) ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                            return '
+                                <div class="subject-item">
+                                    <div class="subject-icon">' . $icon . '</div>
+                                    <div class="subject-info">
+                                        <h6>' . Html::encode($model->name) . '</h6>
+                                        <p>' . Html::encode($model->description ?: 'No description provided') . '</p>
+                                    </div>
+                                </div>
+                            ';
+                        }
+                    ],
+                    [
+                        'class' => ActionColumn::className(),
+                        'template' => '{view} {update} {delete}',
+                        'headerOptions' => ['class' => 'text-end'],
+                        'contentOptions' => ['class' => 'text-end', 'data-label' => 'Actions'],
+                        'buttons' => [
+                            'view' => function ($url, $model, $key) {
+                                return Html::a('
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        ', $url, [
+                                    'class' => 'action-btn view-btn',
+                                    'title' => 'View',
+                                ]);
+                            },
+                            'update' => function ($url, $model, $key) {
+                                return Html::a('
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="m18.5 2.5 a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/>
+            </svg>
+        ', $url, [
+                                    'class' => 'action-btn update-btn',
+                                    'title' => 'Edit',
+                                ]);
+                            },
+                            'delete' => function ($url, $model, $key) {
+                                return Html::a('
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3,6 5,6 21,6"/>
+                <path d="m19,6 v14a2,2 0 0 1-2,2H7a2,2 0 0 1-2-2V6m3,0V4a2,2 0 0 1 2-2h4a2,2 0 0 1 2,2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+            </svg>
+        ', $url, [
+                                    'class' => 'action-btn delete-btn',
+                                    'title' => 'Delete',
+                                    'data-confirm' => 'Are you sure you want to delete this subject?',
+                                    'data-method' => 'post',
+                                ]);
+                            },
+                        ]
+                    ],
+                ],
+            ]); ?>
+        <?php else: ?>
+            <div class="empty-state">
+                <div class="icon">📚</div>
+                <h3>No subjects found</h3>
+                <p>
+                    There are currently no subjects in your learning center.<br>
+                    Start by adding the first one.
+                </p>
+                <?= Html::a('<i class="fas fa-plus"></i> Add the first subject', ['create'], ['class' => 'create-btn']) ?>
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
 
-<!-- FontAwesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const rows = document.querySelectorAll('.table-modern tbody tr');
-        rows.forEach((row, index) => {
-            row.style.opacity = '0';
-            row.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                row.style.transition = 'all 0.5s ease';
-                row.style.opacity = '1';
-                row.style.transform = 'translateY(0)';
-            }, index * 100);
-        });
-    });
-    document.querySelectorAll('.action-btn').forEach(btn => {
-        btn.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px) scale(1.05)';
-        });
-        btn.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

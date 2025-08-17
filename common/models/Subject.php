@@ -48,9 +48,9 @@ class Subject extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'default', 'value' => null],
-            [['name', 'created_at', 'updated_at'], 'required'],
+            [['name'], 'required'],
             [['description'], 'string'],
-            [['created_at', 'updated_at'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique'],
         ];
