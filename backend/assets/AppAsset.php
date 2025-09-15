@@ -12,6 +12,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
         'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700',
         'https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css',
         'https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css',
@@ -30,6 +31,6 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap5\BootstrapAsset',
+        'yii\web\JqueryAsset', // Ushbu qatorni qo'shing
     ];
-
 }

@@ -7,6 +7,8 @@ use common\models\GroupSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * GroupController implements the CRUD actions for Group model.
@@ -62,29 +64,43 @@ class GroupController extends Controller
 
     /**
      * Creates a new Group model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to the 'index' page.
+     *
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
         $model = new Group();
+        $userId = \Yii::$app->user->identity->id;
+        $userRole = \Yii::$app->user->identity->role;
+
+        // Faqat hozirgi foydalanuvchi yaratgan fanlarni olish
+        $subjects = Subject::find()->where(['created_by' => $userId])->all();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            // ... (qolgan qismi o'zgarishsiz qoladi) ...
+            if ($model->load($this->request->post())) {
+                // Avtomatik ravishda teacher_id ni kiritish
+                // Bu joyda `teacher_id` maydonini o'zgarishdan himoya qilish kerak, shuning uchun yuklashdan so'ng kiritamiz
+                $model->teacher_id = $userId;
+                if ($model->save()) {
+                    \Yii::$app->response->format = Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
             }
-        } else {
-            $model->loadDefaultValues();
-        }
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['success' => false, 'errors' => ActiveForm::validate($model)];
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        } else {
+            return $this->renderPartial('_form', [
+                'model' => $model,
+                'subjects' => $subjects, // Fanlar ro'yxatini formaga yuborish
+            ]);
+        }
     }
 
     /**
      * Updates an existing Group model.
-     * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found

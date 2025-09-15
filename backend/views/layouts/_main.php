@@ -1,7 +1,7 @@
 <?php
 
 /** @var yii\web\View $this */
-/** @var string $content */
+/** @var string     $content */
 
 use backend\assets\AppAsset;
 use yii\helpers\Url;
@@ -78,8 +78,8 @@ $this->beginPage() ?>
                             Html::tag('i', '', ['class' => 'ni ni-credit-card text-dark text-sm opacity-10']),
                             ['class' => 'icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center']
                         ) .
-                        Html::tag('span', 'Billing', ['class' => 'nav-link-text ms-1']),
-                        Url::to(['/site/billing']),
+                        Html::tag('span', 'Attendance', ['class' => 'nav-link-text ms-1']),
+                        Url::to(['/group/index']),
                         ['class' => 'nav-link']
                     ) ?>
                 </li>
@@ -189,9 +189,6 @@ $this->beginPage() ?>
 
         <div class="container-fluid py-4">
             <?= $content ?>
-
-
-
         </div>
         <footer class="footer pt-3  ">
             <div class="container-fluid">
@@ -321,7 +318,6 @@ $this->beginPage() ?>
 JS
         , \yii\web\View::POS_END);
 
-    // Tashqi JS fayllarni ro'yxatga olish
     $this->registerJsFile(
         'https://buttons.github.io/buttons.js',
         ['async' => true, 'defer' => true, 'position' => \yii\web\View::POS_END]
