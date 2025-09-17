@@ -72,6 +72,7 @@ class SubjectController extends Controller
         $model = new Subject();
 
         if ($this->request->isPost) {
+            $model->created_by = Yii::$app->user->id;
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

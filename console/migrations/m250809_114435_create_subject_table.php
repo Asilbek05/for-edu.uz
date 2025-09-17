@@ -7,9 +7,6 @@ use yii\db\Migration;
  */
 class m250809_114435_create_subject_table extends Migration
 {
-    /**
-     * {@inheritdoc}
-     */
     public function safeUp()
     {
         $this->createTable('{{%subject}}', [
@@ -20,7 +17,6 @@ class m250809_114435_create_subject_table extends Migration
             'updated_at' => $this->integer()->notNull(),
         ]);
     }
-
     public function safeDown()
     {
         $this->dropTable('{{%subject}}');

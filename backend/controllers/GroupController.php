@@ -9,22 +9,18 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use common\models\Subject;
+use Yii;
 
-/**
- * GroupController implements the CRUD actions for Group model.
- */
 class GroupController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
     public function behaviors()
     {
         return array_merge(
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -33,11 +29,6 @@ class GroupController extends Controller
         );
     }
 
-    /**
-     * Lists all Group models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $searchModel = new GroupSearch();
@@ -49,12 +40,6 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Group model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -62,83 +47,57 @@ class GroupController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Group model.
-     * If creation is successful, the browser will be redirected to the 'index' page.
-     *
-     * @return string|\yii\web\Response
-     */
     public function actionCreate()
     {
         $model = new Group();
-        $userId = \Yii::$app->user->identity->id;
-        $userRole = \Yii::$app->user->identity->role;
-
-        // Faqat hozirgi foydalanuvchi yaratgan fanlarni olish
+        $userId = Yii::$app->user->identity->id;
         $subjects = Subject::find()->where(['created_by' => $userId])->all();
 
         if ($this->request->isPost) {
-            // ... (qolgan qismi o'zgarishsiz qoladi) ...
             if ($model->load($this->request->post())) {
-                // Avtomatik ravishda teacher_id ni kiritish
-                // Bu joyda `teacher_id` maydonini o'zgarishdan himoya qilish kerak, shuning uchun yuklashdan so'ng kiritamiz
                 $model->teacher_id = $userId;
                 if ($model->save()) {
-                    \Yii::$app->response->format = Response::FORMAT_JSON;
-                    return ['success' => true];
+                    Yii::$app->session->setFlash('success', 'Group has been successfully created.');
+                    return $this->redirect(['index']); // to'g'ri yo'naltirish
                 }
             }
-            \Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['success' => false, 'errors' => ActiveForm::validate($model)];
-
-        } else {
-            return $this->renderPartial('_form', [
-                'model' => $model,
-                'subjects' => $subjects, // Fanlar ro'yxatini formaga yuborish
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Group model.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        // GET so'rovi bo'lsa modal uchun forma ko'rinishi qaytariladi
+        return $this->renderAjax('_form', [
             'model' => $model,
+            'subjects' => $subjects,
         ]);
     }
 
-    /**
-     * Deletes an existing Group model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        $userId = Yii::$app->user->identity->id;
+        $subjects = Subject::find()->where(['created_by' => $userId])->all();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                Yii::$app->session->setFlash('success', 'Group has been successfully updated.');
+                return $this->redirect(['index']); // to'g'ri yo'naltirish
+            }
+        }
+
+        // GET so'rovi bo'lsa modal uchun forma ko'rinishi qaytariladi
+        return $this->renderAjax('_form', [
+            'model' => $model,
+            'subjects' => $subjects,
+        ]);
+    }
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Group has been successfully deleted.');
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Group model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Group the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Group::findOne(['id' => $id])) !== null) {

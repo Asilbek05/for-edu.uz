@@ -29,6 +29,21 @@ class Group extends \yii\db\ActiveRecord
     {
         return 'group';
     }
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => \yii\behaviors\TimestampBehavior::class,
+                'attributes' => [
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    \yii\db\BaseActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => function () {
+                    return time();
+                },
+            ],
+        ];
+    }
 
     /**
      * {@inheritdoc}
@@ -36,7 +51,7 @@ class Group extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'teacher_id', 'subject_id', 'created_at', 'updated_at'], 'required'],
+            [['name', 'teacher_id', 'subject_id'], 'required'],
             [['teacher_id', 'subject_id', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['subject_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subject::class, 'targetAttribute' => ['subject_id' => 'id']],

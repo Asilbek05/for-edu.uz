@@ -1,6 +1,5 @@
 <?php
 
-use common\models\Group;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -15,18 +14,82 @@ use yii\widgets\Pjax;
 $this->title = 'Groups';
 $this->params['breadcrumbs'][] = $this->title;
 
-// Required for icons and page styles
 $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 ?>
 
     <style>
-        /* Avvalgi dizayndagi barcha CSS kodlari bu yerga joylashtiriladi */
-        /* ... (CSS styles for .group-page-container, .content-card, .page-header, etc.) ... */
+        /* Avvalgi CSS kodingiz bu yerda o'zgarishsiz qoladi */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .modern-table {
+            margin: 0;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+        }
+
+        .modern-table thead th {
+            background: none;
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.75rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modern-table tbody tr {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 0.75rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .modern-table tbody tr:hover {
+            background-color: rgba(248, 250, 252, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .modern-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .modern-table tbody td {
+            padding: 1.5rem;
+            vertical-align: middle;
+            font-size: 0.95rem;
+            color: #475569;
+            border: none;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(5px);
+        }
 
         .group-page-container {
             padding: 1.5rem 1rem;
             margin: 0;
         }
+
         .page-header {
             display: flex;
             flex-wrap: wrap;
@@ -35,10 +98,12 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             margin-bottom: 2rem;
             gap: 1.5rem;
         }
+
         .page-header-left {
             display: flex;
             flex-direction: column;
         }
+
         .page-header-left h1 {
             font-size: 1.75rem;
             font-weight: 700;
@@ -48,19 +113,23 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             align-items: center;
             gap: 0.75rem;
         }
+
         .page-header-left h1 i {
             color: #4f46e5;
         }
+
         .page-header-left p {
             font-size: 0.95rem;
             color: #64748b;
             margin: 0;
         }
+
         .page-header-right {
             display: flex;
             align-items: center;
             gap: 1rem;
         }
+
         .header-stats {
             background-color: white;
             color: #4f46e5;
@@ -73,6 +142,7 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             align-items: center;
             gap: 0.5rem;
         }
+
         .create-btn {
             background-color: #4f46e5;
             color: #fff;
@@ -86,49 +156,13 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             gap: 0.5rem;
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
         }
+
         .create-btn:hover {
             background-color: #4338ca;
             transform: translateY(-2px);
             color: #fff;
         }
-        .content-card {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            padding: 2rem;
-        }
-        .modern-table {
-            margin: 0;
-            width: 100%;
-        }
-        .modern-table thead th {
-            background: #f8fafc;
-            border: none;
-            color: #64748b;
-            font-weight: 600;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .modern-table tbody tr {
-            border-bottom: 1px solid #e2e8f0;
-            transition: background-color 0.2s ease;
-        }
-        .modern-table tbody tr:hover {
-            background-color: #f8fafc;
-        }
-        .modern-table tbody tr:last-child {
-            border-bottom: none;
-        }
-        .modern-table tbody td {
-            padding: 1.5rem;
-            vertical-align: middle;
-            font-size: 0.95rem;
-            color: #475569;
-        }
+
         .modern-table .filters input {
             border: 1px solid #cbd5e1;
             border-radius: 0.5rem;
@@ -137,15 +171,18 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             font-size: 0.9rem;
             transition: border-color 0.3s ease;
         }
+
         .modern-table .filters input:focus {
             outline: none;
             border-color: #4f46e5;
         }
+
         .action-buttons {
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
         }
+
         .action-btn {
             display: inline-flex;
             align-items: center;
@@ -157,58 +194,72 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             text-decoration: none;
             transition: all 0.3s ease;
         }
+
         .action-btn:hover {
             transform: scale(1.1);
             text-decoration: none;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        .view-btn, .update-btn, .delete-btn {
+
+        .view-btn,
+        .update-btn,
+        .delete-btn {
             color: white;
             padding: 8px;
             border-radius: 8px;
             background-color: transparent;
             transition: all 0.3s ease;
         }
+
         .view-btn {
             color: #6366f1;
             background: #f1f5f9;
         }
+
         .view-btn:hover {
             color: white;
             background-color: #6366f1;
         }
+
         .update-btn {
             color: #10b981;
             background: #f0fdf4;
         }
+
         .update-btn:hover {
             color: white;
             background-color: #10b981;
         }
+
         .delete-btn {
             color: #ef4444;
             background: #fef2f2;
         }
+
         .delete-btn:hover {
             color: white;
             background-color: #ef4444;
         }
+
         .empty-state {
             text-align: center;
             padding: 5rem 2rem;
             color: #64748b;
         }
+
         .empty-state .icon {
             font-size: 4rem;
             color: #cbd5e1;
             margin-bottom: 1.5rem;
         }
+
         .empty-state h3 {
             font-size: 1.5rem;
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 0.75rem;
         }
+
         .empty-state p {
             font-size: 1rem;
             margin-bottom: 2rem;
@@ -216,26 +267,40 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             margin-left: auto;
             margin-right: auto;
         }
-        .modal-content {
-            border-radius: 1.5rem;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
+
         .modal-header {
             border-bottom: none;
             padding: 1.5rem 2rem 0.5rem;
         }
+
         .modal-header h5 {
             font-size: 1.5rem;
             font-weight: 700;
             color: #1e293b;
         }
+
         .modal-header .btn-close {
             font-size: 1rem;
             color: #94a3b8;
         }
+
         .modal-body {
             padding: 0 2rem 1.5rem;
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #065f46;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert .btn-close {
+            padding: 0.5rem;
+            color: #065f46;
+            opacity: 0.7;
         }
     </style>
 
@@ -260,7 +325,14 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
                 </div>
             </div>
 
-            <?php Pjax::begin(); ?>
+            <?php if (Yii::$app->session->hasFlash('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= Yii::$app->session->getFlash('success') ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php Pjax::begin(['id' => 'p0']); ?>
             <?php if ($dataProvider->totalCount > 0): ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -272,15 +344,27 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         'name',
-                        'teacher_id',
-                        'subject_id',
+                        [
+                            'attribute' => 'teacher_id',
+                            'label' => 'Teacher',
+                            'value' => function ($model) {
+                                return $model->teacher->username ?? 'N/A';
+                            },
+                        ],
+                        [
+                            'attribute' => 'subject_id',
+                            'label' => 'Subject',
+                            'value' => function ($model) {
+                                return $model->subject->name ?? 'N/A';
+                            },
+                        ],
                         [
                             'attribute' => 'created_at',
                             'format' => 'datetime',
                             'label' => 'Created At',
                         ],
                         [
-                            'class' => ActionColumn::className(),
+                            'class' => ActionColumn::class,
                             'headerOptions' => ['class' => 'text-end'],
                             'contentOptions' => ['class' => 'text-end'],
                             'template' => '{view} {update} {delete}',
@@ -289,7 +373,13 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
                                     return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>', $url, ['class' => 'action-btn view-btn', 'title' => 'View',]);
                                 },
                                 'update' => function ($url, $model, $key) {
-                                    return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>', $url, ['class' => 'action-btn update-btn', 'title' => 'Edit',]);
+                                    return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>', '#', [
+                                        'class' => 'action-btn update-btn',
+                                        'title' => 'Edit',
+                                        'data-bs-toggle' => 'modal',
+                                        'data-bs-target' => '#updateGroupModal',
+                                        'data-url' => Url::toRoute(['update', 'id' => $model->id]),
+                                    ]);
                                 },
                                 'delete' => function ($url, $model, $key) {
                                     return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="m19,6 v14a2,2 0 0 1-2,2H7a2,2 0 0 1-2-2V6m3,0V4a2,2 0 0 1 2-2h4a2,2 0 0 1 2,2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>', $url, ['class' => 'action-btn delete-btn', 'title' => 'Delete','data-confirm' => 'Are you sure you want to delete this group?','data-method' => 'post',]);
@@ -319,8 +409,7 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
     'options' => ['tabindex' => false],
     'footer' => false,
 ]); ?>
-
-    <div id="modal-content">
+    <div id="create-modal-content">
         <div class="text-center p-5">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -328,35 +417,79 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
             <p class="mt-3 text-secondary">Loading form...</p>
         </div>
     </div>
+<?php Modal::end(); ?>
 
+<?php Modal::begin([
+    'id' => 'updateGroupModal',
+    'title' => '<h5>Update Group</h5>',
+    'options' => ['tabindex' => false],
+    'footer' => false,
+]); ?>
+    <div id="update-modal-content">
+        <div class="text-center p-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-secondary">Loading form...</p>
+        </div>
+    </div>
 <?php Modal::end(); ?>
 
 <?php
 $createUrl = Url::to(['create']);
 $js = <<<JS
 $(document).ready(function() {
+
+    // Create Modal ochilganda AJAX orqali formani yuklash
     $('#createGroupModal').on('show.bs.modal', function () {
         $.ajax({
             url: '$createUrl',
             type: 'GET',
             success: function(response) {
-                $('#modal-content').html(response);
-                // Agar forma ichida yii-active-form mavjud bo'lsa, uni ishga tushirish
-                $('#group-form-modal').yiiActiveForm('resetForm');
+                $('#create-modal-content').html(response);
             },
             error: function() {
-                $('#modal-content').html('<div class="alert alert-danger">An error occurred while loading the form.</div>');
+                $('#create-modal-content').html('<div class="alert alert-danger">An error occurred while loading the form.</div>');
             }
         });
     });
 
-    $('#createGroupModal').on('hidden.bs.modal', function () {
-        $('#modal-content').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-3 text-secondary">Loading form...</p></div>');
+    // Update Modal ochilganda AJAX orqali formani yuklash
+    $(document).on('click', '.update-btn', function(e) {
+        e.preventDefault();
+        var url = $(this).data('url');
+        $('#updateGroupModal').modal('show');
+        
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                $('#update-modal-content').html(response);
+            },
+            error: function() {
+                $('#update-modal-content').html('<div class="alert alert-danger">An error occurred while loading the form.</div>');
+            }
+        });
     });
 
+    // Modal yashirilganda form kontentini tozalash
+    $('#createGroupModal, #updateGroupModal').on('hidden.bs.modal', function () {
+        var modalContentId = $(this).find('.modal-body > div').attr('id');
+        
+        if (modalContentId === 'create-modal-content') {
+             $('#create-modal-content').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-3 text-secondary">Loading form...</p></div>');
+        } else if (modalContentId === 'update-modal-content') {
+             $('#update-modal-content').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-3 text-secondary">Loading form...</p></div>');
+        }
+    });
+
+
+    // Form submissionni AJAX orqali boshqarish
     $(document).on('beforeSubmit', '#group-form-modal', function(e) {
         e.preventDefault();
         var form = $(this);
+        var modalId = form.closest('.modal').attr('id');
+
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
@@ -364,7 +497,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    $('#createGroupModal').modal('hide');
+                    $('#' + modalId).modal('hide');
                     $.pjax.reload({container: '#p0', async: false});
                 } else {
                     form.yiiActiveForm('updateMessages', response.errors, true);

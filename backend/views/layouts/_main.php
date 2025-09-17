@@ -78,7 +78,7 @@ $this->beginPage() ?>
                             Html::tag('i', '', ['class' => 'ni ni-credit-card text-dark text-sm opacity-10']),
                             ['class' => 'icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center']
                         ) .
-                        Html::tag('span', 'Attendance', ['class' => 'nav-link-text ms-1']),
+                        Html::tag('span', 'Group', ['class' => 'nav-link-text ms-1']),
                         Url::to(['/group/index']),
                         ['class' => 'nav-link']
                     ) ?>
@@ -90,8 +90,8 @@ $this->beginPage() ?>
                             Html::tag('i', '', ['class' => 'ni ni-app text-dark text-sm opacity-10']),
                             ['class' => 'icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center']
                         ) .
-                        Html::tag('span', 'Virtual Reality', ['class' => 'nav-link-text ms-1']),
-                        Url::to(['/site/virtual-reality']),
+                        Html::tag('span', 'Students', ['class' => 'nav-link-text ms-1']),
+                        Url::to(['/student/index']),
                         ['class' => 'nav-link']
                     ) ?>
                 </li>

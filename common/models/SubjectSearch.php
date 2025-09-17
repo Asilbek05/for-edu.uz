@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Subject;
@@ -41,7 +42,9 @@ class SubjectSearch extends Subject
      */
     public function search($params, $formName = null)
     {
-        $query = Subject::find();
+        $query = Subject::find()
+            ->andFilterWhere(['created_by' => Yii::$app->user->identity->id]);
+
 
         // add conditions that should always apply here
 
