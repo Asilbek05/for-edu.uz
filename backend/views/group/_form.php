@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 ?>
 
 <style>
-    /* Umumiy form va modal uslublari */
+    /* ... Avvalgi CSS kodi o'zgarishsiz qoladi ... */
     .modal-body .form-group {
         margin-bottom: 1.5rem;
     }
@@ -23,7 +23,6 @@ use yii\helpers\ArrayHelper;
         display: block;
     }
 
-    /* Input va Select maydonlari uchun yagona uslub */
     .modal-body .form-control,
     .modal-body .form-select {
         border: 1px solid #e2e8f0;
@@ -44,7 +43,6 @@ use yii\helpers\ArrayHelper;
         background-size: 1rem;
     }
 
-    /* Focus holatidagi uslublar */
     .modal-body .form-control:focus,
     .modal-body .form-select:focus {
         border-color: #4f46e5;
@@ -53,7 +51,6 @@ use yii\helpers\ArrayHelper;
         background-color: white;
     }
 
-    /* Tugma guruhining umumiy uslublari */
     .modal-footer {
         display: flex;
         justify-content: flex-end;
@@ -63,7 +60,6 @@ use yii\helpers\ArrayHelper;
         margin-top: 1rem;
     }
 
-    /* Tugmalarning o'lchamini kichraytirish va ko'rinishini yaxshilash */
     .btn-action {
         font-weight: 600;
         padding: 0.5rem 1rem;
@@ -107,14 +103,13 @@ use yii\helpers\ArrayHelper;
 <div class="group-form">
     <?php $form = ActiveForm::begin([
         'id' => 'group-form-modal',
-        'enableAjaxValidation' => true,
+        'enableAjaxValidation' => false, // ❗ MUHIM O'ZGARISH
         'enableClientValidation' => true,
         'validateOnBlur' => true,
     ]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => 'e.g., G-1, Mathematics A']) ?>
 
-    <?= $form->field($model, 'teacher_id')->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'subject_id')->dropDownList(
         ArrayHelper::map($subjects, 'id', 'name'),

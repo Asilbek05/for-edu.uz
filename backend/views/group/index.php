@@ -18,7 +18,6 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
 ?>
 
     <style>
-        /* Avvalgi CSS kodingiz bu yerda o'zgarishsiz qoladi */
         body {
             background-color: #f0f2f5;
             font-family: 'Inter', sans-serif;
@@ -367,11 +366,8 @@ $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.
                             'class' => ActionColumn::class,
                             'headerOptions' => ['class' => 'text-end'],
                             'contentOptions' => ['class' => 'text-end'],
-                            'template' => '{view} {update} {delete}',
+                            'template' => '{update} {delete}',
                             'buttons' => [
-                                'view' => function ($url, $model, $key) {
-                                    return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>', $url, ['class' => 'action-btn view-btn', 'title' => 'View',]);
-                                },
                                 'update' => function ($url, $model, $key) {
                                     return Html::a('<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>', '#', [
                                         'class' => 'action-btn update-btn',
@@ -440,7 +436,6 @@ $createUrl = Url::to(['create']);
 $js = <<<JS
 $(document).ready(function() {
 
-    // Create Modal ochilganda AJAX orqali formani yuklash
     $('#createGroupModal').on('show.bs.modal', function () {
         $.ajax({
             url: '$createUrl',
@@ -454,7 +449,6 @@ $(document).ready(function() {
         });
     });
 
-    // Update Modal ochilganda AJAX orqali formani yuklash
     $(document).on('click', '.update-btn', function(e) {
         e.preventDefault();
         var url = $(this).data('url');
@@ -472,9 +466,8 @@ $(document).ready(function() {
         });
     });
 
-    // Modal yashirilganda form kontentini tozalash
     $('#createGroupModal, #updateGroupModal').on('hidden.bs.modal', function () {
-        var modalContentId = $(this).find('.modal-body > div').attr('id');
+        var modalContentId = $(this).find('.modal-content > div').attr('id');
         
         if (modalContentId === 'create-modal-content') {
              $('#create-modal-content').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-3 text-secondary">Loading form...</p></div>');
@@ -484,31 +477,8 @@ $(document).ready(function() {
     });
 
 
-    // Form submissionni AJAX orqali boshqarish
-    $(document).on('beforeSubmit', '#group-form-modal', function(e) {
-        e.preventDefault();
-        var form = $(this);
-        var modalId = form.closest('.modal').attr('id');
-
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#' + modalId).modal('hide');
-                    $.pjax.reload({container: '#p0', async: false});
-                } else {
-                    form.yiiActiveForm('updateMessages', response.errors, true);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR, textStatus, errorThrown);
-                alert('An error occurred during save.');
-            }
-        });
-        return false;
+    $(document).on('beforeSubmit', '#group-form-modal', function () {
+        return true;
     });
 });
 JS;

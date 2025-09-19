@@ -56,14 +56,14 @@ class GroupController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->teacher_id = $userId;
+
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Group has been successfully created.');
-                    return $this->redirect(['index']); // to'g'ri yo'naltirish
+                    return $this->redirect(['index']);
                 }
             }
         }
 
-        // GET so'rovi bo'lsa modal uchun forma ko'rinishi qaytariladi
         return $this->renderAjax('_form', [
             'model' => $model,
             'subjects' => $subjects,
@@ -77,13 +77,16 @@ class GroupController extends Controller
         $subjects = Subject::find()->where(['created_by' => $userId])->all();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                Yii::$app->session->setFlash('success', 'Group has been successfully updated.');
-                return $this->redirect(['index']); // to'g'ri yo'naltirish
+            if ($model->load($this->request->post())) {
+                $model->teacher_id = $userId;
+
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Group has been successfully updated.');
+                    return $this->redirect(['index']);
+                }
             }
         }
 
-        // GET so'rovi bo'lsa modal uchun forma ko'rinishi qaytariladi
         return $this->renderAjax('_form', [
             'model' => $model,
             'subjects' => $subjects,
