@@ -103,7 +103,7 @@ use yii\helpers\ArrayHelper;
 <div class="group-form">
     <?php $form = ActiveForm::begin([
         'id' => 'group-form-modal',
-        'enableAjaxValidation' => false, // ❗ MUHIM O'ZGARISH
+        'enableAjaxValidation' => false,
         'enableClientValidation' => true,
         'validateOnBlur' => true,
     ]); ?>

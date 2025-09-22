@@ -204,7 +204,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js
             ],
             'pluginOptions' => [
                 'allowClear' => true,
-                'tags' => true, // Bu yangi guruh yaratish imkonini beradi
+                'tags' => true,
             ],
         ])->label('Group') ?>
 
@@ -243,6 +243,7 @@ $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js
                     'format' => 'datetime',
                     'label' => 'Registered On',
                 ],
+
                 [
                     'class' => ActionColumn::class,
                     'headerOptions' => ['class' => 'text-end'],
